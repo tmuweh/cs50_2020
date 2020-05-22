@@ -1,0 +1,6 @@
+
+prompt and get user input ( an integer between 1 and 8 inclusively).     done!
+prompt user to enter integer if not in range         done!
+print left aligned pyramid
+print dots to create a right aligned hash pyramid
+replace dots by spaces
