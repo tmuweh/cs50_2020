@@ -30,17 +30,31 @@ int main(int argc, string argv[])
 
     //prompt user to import plain text
     string plaintext = get_string("PlainText: ");
-    string ciphertext = "";
+    char ciphertext[strlen(plaintext)];
 
-    //length of string
-    int size = strlen(plaintext);
-    printf("%d,", size);
     //cipher plain text
+    for(int i = 0; i < strlen(plaintext); i++)
+    {
+        //cipher characters preserving the case
 
-        //cipher one character to preserve the case
+        //preserve non alpha characters
+        if(!isalpha(plaintext[i]))
+        {
+            ciphertext[i] = plaintext[i];
+        }else
+        {
+            //convert indexs to simple and manipulatable reference 0 25, making a 0 and z 25 and convert back once done
+            if(isupper(plaintext[i]))
+            {
+                ciphertext[i] = (((plaintext[i] - 'A') + key) % 26) + 'A';
+            }else
+            {
+                ciphertext[i] = (((plaintext[i] - 'a') + key) % 26) + 'a';
+            }
+        }
+    }
 
-        //preserve non alphanum characters
-
+    printf("CipherText: %s", ciphertext);
 
     printf("\n");
 
