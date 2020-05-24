@@ -2,6 +2,7 @@
 #include <cs50.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <string.h>
 
 
 
@@ -26,9 +27,14 @@ int main(int argc, string argv[])
 
         return 1;
     }
-    
-    //prompt user to import plain text
 
+    //prompt user to import plain text
+    string plaintext = get_string("PlainText: ");
+    string ciphertext = "";
+
+    //length of string
+    int size = strlen(plaintext);
+    printf("%d,", size);
     //cipher plain text
 
         //cipher one character to preserve the case
