@@ -17,19 +17,24 @@ int main(int argc, string argv[])
         return 1;
     }
 
-    //convert string to integer using atoi()
-    key = atoi(argv[1]);
-
-    //assumes atoi converts non digits to zero so text if converted is zero :)
-    if(key == 0)
+    //check for non-numeric key
+    for(int i = 0; i < strlen(argv[1]); i++) // loops through argumetn string for the presence of a non numeric char.
     {
-        printf("Usage: ./caesar key \n");
+        if(argv[1][i] < '0' || argv[1][i] > '9') // checks every character in the argument string for numeric ascii values
+        {
+            printf("Usage: ./caesar key \n");
 
-        return 1;
+            return 1;
+        }
+
+        //if exits loop without return then... no non-numeric found
     }
 
+   //convert string to integer using atoi()
+    key = atoi(argv[1]);
+
     //prompt user to import plain text
-    string plaintext = get_string("PlainText: ");
+    string plaintext = get_string("plaintext: ");
     char ciphertext[strlen(plaintext)];
 
     //cipher plain text
@@ -54,7 +59,7 @@ int main(int argc, string argv[])
         }
     }
 
-    printf("CipherText: %s", ciphertext);
+    printf("ciphertext: %s", ciphertext);
 
     printf("\n");
 
