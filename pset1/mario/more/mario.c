@@ -28,7 +28,7 @@ int main(void)
         {
             if(column - row > 0)
             {
-                printf(" ");
+                printf("");
             }
             else
             {
