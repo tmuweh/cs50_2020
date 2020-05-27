@@ -7,11 +7,11 @@
 int main(int argc, string argv[])
 {
   //check if user put in an argument
-  if(argc != 2)
+  if (argc != 2)
   {
-      printf("Usage: ./caesar KEY \n");
+    printf("Usage: ./caesar KEY \n");
 
-      return 1;
+    return 1;
   }
 
   //check for length of argument
@@ -26,7 +26,7 @@ int main(int argc, string argv[])
   //store counts of occurrences of individual letters 0 - 25, initialize count to 0 per letter
   int letter[26];
   for (int i = 0; i < 26; i++){
-      letter[i] = 0;
+    letter[i] = 0;
   }
 
   for (int i = 0; i < strlen(argv[1]); i++) // loops through argumetn string
@@ -59,16 +59,31 @@ int main(int argc, string argv[])
   }
   //cipher text is case insensitive
 
-
   //get plain text
+  string plaintext = get_string("plaintext: ");
 
-    //plain text is case sensitive
+  printf("ciphertext: ");
 
-  //cipher plain text
+  //cipher case sensitive plaintext
+  for(int i = 0; i < strlen(plaintext); i++)
+  {
+    //cipher uppercase
+    if (isupper(plaintext[i]))
+    {
+      printf("%c", toupper(argv[1][plaintext[i]- 'A']));
+    }
+    //cipher lowercase
+    if (islower(plaintext[i]))
+    {
+      printf("%c", tolower(argv[1][plaintext[i] - 'a']));
+    }
 
-    //check availability and case
-
-  //print cipher text
+    //leave non alpha characters un ciphered
+    if (!isalpha(plaintext[i]))
+    {
+      printf("%c", plaintext[i]);
+    }
+  }
 
   //print new line
   printf("\n");
