@@ -132,9 +132,9 @@ bool vote(int voter, int rank, string name)
 {
 
     //compare if name is on list of candidates else return false
-    for(int i = 0; i < candidate_count; i++)
+    for (int i = 0; i < candidate_count; i++)
     {
-        if(strcmp(name, candidates[i].name) == 0)
+        if (strcmp(name, candidates[i].name) == 0)
         {
             preferences[voter][rank] = i;
             return true;
@@ -155,7 +155,7 @@ void tabulate(void)
             //check if candidate is not eliminated
             if (!candidates[preferences[i][j]].eliminated)
             {
-                candidates[preferences[i][j]].votes +=1;
+                candidates[preferences[i][j]].votes += 1;
                 break;
             }
             else
@@ -210,7 +210,7 @@ bool is_tie(int min)
     //check any non eliminated candidate has a vote which is not the min return not a tie
     for (int i = 0; i < candidate_count; i++)
     {
-        if(min != candidates[i].votes && !candidates[i].eliminated)
+        if (min != candidates[i].votes && !candidates[i].eliminated)
         {
             return false;
         }
@@ -225,7 +225,8 @@ void eliminate(int min)
     //if any non eliminated candidate have the min vote... eliminate
     for (int i = 0; i < candidate_count; i++)
     {
-       if(min == candidates[i].votes && !candidates[i].eliminated)
+
+        if (min == candidates[i].votes && !candidates[i].eliminated)
         {
             candidates[i].eliminated = true;
         }
