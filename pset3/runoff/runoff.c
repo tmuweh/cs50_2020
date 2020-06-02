@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <math.h>
 
 // Max voters and candidates
 #define MAX_VOTERS 100
@@ -181,9 +182,13 @@ void tabulate(void)
 bool print_winner(void)
 {
     // TODO
-    for(int i = 0; i < candidate_count; i++)
+    for (int i = 0; i < candidate_count; i++)
     {
-        printf("%s - %d\n", candidates[i].name, candidates[i].votes);
+        if(candidates[i].votes > (int) round(voter_count / 2))
+        {
+            printf("%s - %d\n", candidates[i].name, candidates[i].votes);
+            return true;
+        }
     }
     return false;
 }
