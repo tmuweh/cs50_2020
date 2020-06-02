@@ -167,14 +167,6 @@ void tabulate(void)
         }
     }
 
-    //check if candidate has been eliminated
-    //let all candidate vote for their top preferenceies
-
-    //check for for majority votes
-        //exit with winner
-        //eliminate candidate(s)
-        // do check for majority votes again
-
     return;
 }
 
@@ -184,14 +176,11 @@ bool print_winner(void)
     // TODO
     for (int i = 0; i < candidate_count; i++)
     {
-        printf("%d half", (int) round(voter_count / 2));
         if(candidates[i].votes > (int) round(voter_count / 2))
         {
-            printf("%s - %d\n", candidates[i].name, candidates[i].votes);
+            printf("%s\n", candidates[i].name);
             return true;
         }
-
-        printf("%d half", (int) round(voter_count / 2));
     }
     return false;
 }
@@ -211,7 +200,7 @@ int find_min(void)
             min_vote = candidates[i].votes;
         }
     }
-    printf("Min vote: %d", min_vote);
+
     return min_vote;
 }
 
