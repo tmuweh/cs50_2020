@@ -14,12 +14,14 @@ int main(void)
         for(int column = 0; column <= height; column++)
         {
             //print space or hash tag using formular nth row + space <= height - 1 print space else, print hash
-            if( (row + column) < height)
-
-                printf(" ");
-            else
-
+            if( (row + column) >= height)
+            {
                 printf("#");
+            }
+            else
+            {
+                printf(" ");
+            }
 
         }
         printf("  ");//print two spaces btw right and left aligned pyramids
