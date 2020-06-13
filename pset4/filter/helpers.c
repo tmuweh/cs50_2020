@@ -1,5 +1,6 @@
 #include "helpers.h"
 #include <math.h>
+#include <stdio.h>
 
 // Convert image to grayscale
 void grayscale(int height, int width, RGBTRIPLE image[height][width])
@@ -78,5 +79,90 @@ void reflect(int height, int width, RGBTRIPLE image[height][width])
 // Blur image
 void blur(int height, int width, RGBTRIPLE image[height][width])
 {
+    int blurRed = 0;
+    int blurGreen = 0;
+    int blurBlue = 0;
+    int pixels;
+    for (int i = 0; i < height; i++)
+    {
+
+        for (int j = 0; j < width; j++)
+        {
+            //reset pixels
+            pixels = 0;
+            //for the ith row of pixel
+            blurRed = image[i][j].rgbtRed;
+            blurGreen = image[i][j].rgbtGreen;
+            blurBlue = image[i][j].rgbtBlue;
+            pixels = pixels + 1;
+
+            //for the ith row of pixels
+            if (i  > 0 && j - 1 > 0)
+            {
+                blurRed += image[i][j-1].rgbtRed;
+                blurGreen += image[i][j-1].rgbtGreen;
+                blurBlue += image[i][j-1].rgbtBlue;
+                ++pixels;
+            }
+            if (i > 0 && j + 1 < width)
+            {
+                blurRed += image[i][j+1].rgbtRed;
+                blurGreen += image[i][j+1].rgbtGreen;
+                blurBlue += image[i][j+1].rgbtBlue;
+                ++pixels;
+            }
+
+            //for the ith - 1 row of pixel
+            if (i - 1 > 0 && j - 1 > 0)
+            {
+                blurRed += image[i-1][j-1].rgbtRed;
+                blurGreen += image[i-1][j-1].rgbtGreen;
+                blurBlue += image[i-1][j-1].rgbtBlue;
+                ++pixels;
+            }
+            if (i - 1 > 0 && j > 0)
+            {
+                blurRed += image[i-1][j].rgbtRed;
+                blurGreen += image[i-1][j].rgbtGreen;
+                blurBlue += image[i-1][j].rgbtBlue;
+                ++pixels;
+            }
+            if (i - 1 > 0 && j + 1 < width)
+            {
+                blurRed += image[i-1][j+1].rgbtRed;
+                blurGreen += image[i-1][j+1].rgbtGreen;
+                blurBlue += image[i-1][j+1].rgbtBlue;
+                ++pixels;
+            }
+
+            //for the ith + 1 row of pixel
+            if (i + 1 < height && j - 1 > 0)
+            {
+                blurRed += image[i+1][j-1].rgbtRed;
+                blurGreen += image[i+1][j-1].rgbtGreen;
+                blurBlue += image[i+1][j-1].rgbtBlue;
+                ++pixels;
+            }
+            if (i + 1 < height && j > 0)
+            {
+                blurRed += image[i+1][j].rgbtRed;
+                blurGreen += image[i+1][j].rgbtGreen;
+                blurBlue += image[i+1][j].rgbtBlue;
+                ++pixels;
+            }
+            if (i + 1 < height && j + 1 < width)
+            {
+                blurRed += image[i+1][j+1].rgbtRed;
+                blurGreen += image[i+1][j+1].rgbtGreen;
+                blurBlue += image[i+1][j+1].rgbtBlue;
+                ++pixels;
+            }
+
+            //printf("pixels are : %d\n", pixels);
+            image[i][j].rgbtRed = round(blurRed / pixels);
+            image[i][j].rgbtGreen = round(blurGreen / pixels);
+            image[i][j].rgbtBlue = round(blurBlue / pixels);
+        }
+    }
     return;
 }
