@@ -53,7 +53,7 @@ int main(int argc, char *argv[])
             //set found jpg to true
             new_jpg = true;
 
-            sprintf(image_name, "%03i.jpg", jpegs_found);
+            sprintf(image_name, "%03i.jpg", jpegs_found-1);
 
             //close previous image file
             if (img != NULL)
