@@ -41,8 +41,11 @@ int main(int argc, char *argv[])
     //create an img pounter
     FILE *img = NULL;
 
+    int run_loop_count = 0;
     //read 512 bytes
-    do{
+    do
+    {
+
         fread(byte, sizeof(BYTE), 512, file);
 
         if (byte[0] == 0xff && byte[1] == 0xd8  && byte[2] == 0xff && (byte[3] & 0xf0) == 0xe0 )

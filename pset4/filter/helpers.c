@@ -13,7 +13,7 @@ void grayscale(int height, int width, RGBTRIPLE image[height][width])
         for (int j = 0; j < width; j++)
         {
             //take average of rgb values
-            avg_rgb = round((image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3);
+            avg_rgb = round((image[i][j].rgbtBlue + image[i][j].rgbtGreen + image[i][j].rgbtRed) / 3.0);
 
             //assign the new value to variable
             image[i][j].rgbtBlue = avg_rgb;
@@ -173,9 +173,9 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
             }
 
             //printf("pixels are : %d\n", pixels);
-            image[i][j].rgbtRed = round(blurRed / pixels);
-            image[i][j].rgbtGreen = round(blurGreen / pixels);
-            image[i][j].rgbtBlue = round(blurBlue / pixels);
+            image[i][j].rgbtRed = round((float)blurRed / pixels);
+            image[i][j].rgbtGreen = round((float)blurGreen / pixels);
+            image[i][j].rgbtBlue = round((float)blurBlue / pixels);
         }
     }
     return;
