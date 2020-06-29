@@ -3,6 +3,8 @@
 #include <stdbool.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "dictionary.h"
 
@@ -45,13 +47,41 @@ unsigned int hash(const char *word)
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
-    // TODO
-    return false;
+    char buffer[LENGTH + 1];
+
+    FILE *fp = fopen(dictionary, "r");
+
+    if (fp == NULL)
+    {
+        return false;
+    }
+
+    while ( fscanf(fp, "%s", buffer) != EOF)
+    {
+        node *word = malloc(sizeof(node));
+        //first element into the hash table
+        if ((table[hash(buffer)]) == NULL)
+        {
+            table[hash(buffer)] = word;
+            word->next = NULL;
+        }
+
+        //adding new words at the begining of the linked list
+        word->next = table[hash(buffer)];
+        table[hash(buffer)] = word;
+
+
+    }
+
+    //close file
+    fclose(fp);
+    return true;
 }
 
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
 unsigned int size(void)
 {
+
     // TODO
     return 0;
 }
