@@ -59,6 +59,12 @@ bool load(const char *dictionary)
     while ( fscanf(fp, "%s", buffer) != EOF)
     {
         node *word = malloc(sizeof(node));
+
+        //if at any given time, memory isn't  allocated
+        if (word == NULL)
+        {
+            return false;
+        }
         //first element into the hash table
         if ((table[hash(buffer)]) == NULL)
         {
@@ -82,8 +88,19 @@ bool load(const char *dictionary)
 unsigned int size(void)
 {
 
-    // TODO
-    return 0;
+    //numbers of words/nodes
+    int words = 0;
+    //loop through hash table
+    for (int i = 0; i < N; i ++)
+    {
+        //for array pointer to a link list
+        for (node *tmp = table[i]; tmp != NULL; tmp = tmp->next)
+        {
+            //counts nodes/words
+            words++;
+        }
+    }
+    return words;
 }
 
 // Unloads dictionary from memory, returning true if successful else false
