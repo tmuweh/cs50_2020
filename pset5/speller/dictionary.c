@@ -2,6 +2,7 @@
 
 #include <stdbool.h>
 #include <string.h>
+#include <strings.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -25,7 +26,14 @@ node *table[N];
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    // TODO
+    //find index and search till null stopping when found
+    for (node *tmp = table[hash(word)]; tmp != NULL; tmp = tmp->next)
+        {
+            if (strcasecmp(tmp->word, word) == 0)
+            {
+                return true;
+            }
+        }
     return false;
 }
 
