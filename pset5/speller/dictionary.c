@@ -18,22 +18,22 @@ typedef struct node
 node;
 
 // Number of buckets in hash table
-const unsigned int N = 1801;
+const unsigned int N = 991;
 
-// Hash table initialized to NULL
-node *table[N] = {NULL};
+// Hash table
+node *table[N];
 
 // Returns true if word is in dictionary else false
 bool check(const char *word)
 {
-    //find index and search till null stopping when found
     for (node *tmp = table[hash(word)]; tmp != NULL; tmp = tmp->next)
+    {
+        if (strcasecmp(tmp->word, word) == 0)
         {
-            if (strcasecmp(tmp->word, word) == 0)
-            {
-                return true;
-            }
+            return true;
         }
+
+    }
     return false;
 }
 
@@ -45,14 +45,20 @@ unsigned int hash(const char *word)
     {
         sum += tolower(word[i]);
     }
-    //multiply by the ascii value of the first char in the word;
-    sum *= word[0];
-    return sum % N;
+    sum *=tolower(word[0]);
+    //printf("sum is %d, mode N is %d\n", sum, sum % N);
+    return (sum % N);
 }
 
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
+    /*//initialize table to
+    for (int i = 0; i < N; i++)
+    {
+        table[i] = NULL;
+    }
+    */
     char buffer[LENGTH + 1];
 
     FILE *fp = fopen(dictionary, "r");
@@ -64,31 +70,35 @@ bool load(const char *dictionary)
 
     while ( fscanf(fp, "%s", buffer) != EOF)
     {
-        printf("buffer: %s\n", buffer);
-        node *word = malloc(sizeof(node));
+        node *n = malloc(sizeof(node));
 
         //if at any given time, memory isn't  allocated
-        if (word == NULL)
+        if (n == NULL)
         {
             return false;
         }
-        //first element into the hash table
-        if ((table[hash(buffer)]) == NULL)
-        {
-            table[hash(buffer)] = word;
-            word->next = NULL;
-        }
 
-        //adding new words at the begining of the linked list
-        word->next = table[hash(buffer)];
-        table[hash(buffer)] = word;
+        //copy buffer into allocated memory
+        strcpy(n->word, buffer);
 
+        //store word in hash table
+        n->next = table[hash(n->word)];
+        table[hash(n->word)] = n;
 
     }
 
     //close file
     fclose(fp);
-    return true;
+    for (int i = 0; i < N; i++)
+    {
+        printf("[%i]-> ", i);
+        for (node *tmp = table[i]; tmp != NULL; tmp = tmp->next)
+        {
+            printf(" %s ->", tmp->word);
+        }
+        printf("\n");
+    }
+        return true;
 }
 
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
@@ -107,6 +117,8 @@ unsigned int size(void)
             words++;
         }
     }
+
+    printf("[words %d]", words);
     return words;
 }
 
