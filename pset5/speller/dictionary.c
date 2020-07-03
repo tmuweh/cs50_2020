@@ -46,19 +46,12 @@ unsigned int hash(const char *word)
         sum += tolower(word[i]);
     }
     sum *=tolower(word[0]);
-    //printf("sum is %d, mode N is %d\n", sum, sum % N);
     return (sum % N);
 }
 
 // Loads dictionary into memory, returning true if successful else false
 bool load(const char *dictionary)
 {
-    /*//initialize table to
-    for (int i = 0; i < N; i++)
-    {
-        table[i] = NULL;
-    }
-    */
     char buffer[LENGTH + 1];
 
     FILE *fp = fopen(dictionary, "r");
@@ -89,16 +82,7 @@ bool load(const char *dictionary)
 
     //close file
     fclose(fp);
-    for (int i = 0; i < N; i++)
-    {
-        printf("[%i]-> ", i);
-        for (node *tmp = table[i]; tmp != NULL; tmp = tmp->next)
-        {
-            printf(" %s ->", tmp->word);
-        }
-        printf("\n");
-    }
-        return true;
+    return true;
 }
 
 // Returns number of words in dictionary if loaded else 0 if not yet loaded
@@ -118,7 +102,6 @@ unsigned int size(void)
         }
     }
 
-    printf("[words %d]", words);
     return words;
 }
 
