@@ -19,10 +19,18 @@ database = open(argv[1], "r")
 sequence = open(argv[2], "r")
 
 # get number of STRs from database
+strs = next(reader(database, dialect="excel"))
+
+# remove the name member on list
+strs.pop(0)
 
 # for each STRs in database search sequence for the longest occurence
+
 
     # keep track of the repeats
 
 # compare repeats with STRs in the data base and print name of owner or not found
 
+# close opened files
+database.close()
+sequence.close()
