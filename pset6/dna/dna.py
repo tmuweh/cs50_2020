@@ -24,7 +24,18 @@ strs = next(reader(database, dialect="excel"))
 # remove the name member on list
 strs.pop(0)
 
+# get len of sequece of dna sequence
+
 # for each STRs in database search sequence for the longest occurence
+dna = next(sequence)
+for str in strs:
+    print(str)
+    print("______")
+    j = len(str)
+    for i in range(len(dna)):
+        print(dna[i:( j + i)])
+
+
 
 
     # keep track of the repeats
