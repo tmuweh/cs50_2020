@@ -13,9 +13,10 @@ if len(argv) != 3:
     exit(1)
 
 # open database and save content to memory
-
+database = open(argv[1], "r")
 
 # open sequence file and save to memory
+sequence = open(argv[2], "r")
 
 # get number of STRs from database
 
