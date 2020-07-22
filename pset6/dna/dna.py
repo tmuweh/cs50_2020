@@ -24,17 +24,39 @@ strs = next(reader(database, dialect="excel"))
 # remove the name member on list
 strs.pop(0)
 
-# get len of sequece of dna sequence
-
-# for each STRs in database search sequence for the longest occurence
+# get dna sequence from object.
 dna = next(sequence)
-for str in strs:
-    print(str)
-    print("______")
-    j = len(str)
-    for i in range(len(dna)):
-        print(dna[i:( j + i)])
 
+# dictionary to hold strs occurences
+dict = {}
+keys = strs
+values = 0
+
+#initialize the array
+for i in keys:
+        dict[i] = 0
+# for each STRs in database search sequence for the longest occurence
+for str in strs:
+
+    j = len(str)
+
+    # count occurences
+    counter = 0
+    for i in range(len(dna)):
+
+        # value to keep i unchanged
+        k = i
+
+        while dna[k:(k+j)] == str:
+            counter += 1
+
+            # shifting an str length(j) along sequence
+            k += j
+
+        if dict[str] < counter:
+            dict[str] = counter
+        counter = 0
+print(dict)
 
 
 
