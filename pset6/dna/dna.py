@@ -30,14 +30,12 @@ dna = next(sequence)
 # dictionary to hold strs occurences
 dict = {}
 keys = strs
-values = 0
 
-#initialize the array
+# initialize the array
 for i in keys:
         dict[i] = 0
 # for each STRs in database search sequence for the longest occurence
 for str in strs:
-
     j = len(str)
 
     # count occurences
@@ -47,23 +45,56 @@ for str in strs:
         # value to keep i unchanged
         k = i
 
+        # find number of consecutive repeats from current str
         while dna[k:(k+j)] == str:
+
+            # keep track of consecutive repeats
             counter += 1
 
             # shifting an str length(j) along sequence
             k += j
 
+        # update most consecutive occurence
         if dict[str] < counter:
             dict[str] = counter
+
+        # reset counter
         counter = 0
-print(dict)
 
+# read into list
+bank = reader(database, dialect='excel')
 
+#convert dictionary to list
+occurence_list = list(dict.values())
 
-    # keep track of the repeats
+# to hold int value of database str count
+dicts =  []
 
 # compare repeats with STRs in the data base and print name of owner or not found
+
+found = False
+for line in bank:
+    name = line.pop(0)
+
+    # convert string lis to int
+    for number in line:
+        dicts.append(int(number))
+
+    # compare two int list of str counts for each person on the database
+    if dicts == occurence_list:
+        print(name)
+        found = True
+
+    # empty list after each comparison
+    dicts = []
+
+
 
 # close opened files
 database.close()
 sequence.close()
+
+# Not found
+if found != True:
+    print("Not Found")
+exit(0)
