@@ -72,7 +72,7 @@ dicts =  []
 
 # compare repeats with STRs in the data base and print name of owner or not found
 
-found = False
+match = False
 for line in bank:
     name = line.pop(0)
 
@@ -83,7 +83,7 @@ for line in bank:
     # compare two int list of str counts for each person on the database
     if dicts == occurence_list:
         print(name)
-        found = True
+        match = True
 
     # empty list after each comparison
     dicts = []
@@ -95,6 +95,6 @@ database.close()
 sequence.close()
 
 # Not found
-if found != True:
-    print("Not Found")
+if match != True:
+    print("No Match")
 exit(0)
