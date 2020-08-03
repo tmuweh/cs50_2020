@@ -14,7 +14,7 @@ house = argv[1]
 db = cs50.SQL("sqlite:///students.db")
 
 # get records
-records = db.execute("SELECT * FROM students WHERE house = ?", house)
+records = db.execute("SELECT * FROM students WHERE house = ? ORDER BY last, first", house)
 
 # print records
 for row in records:
