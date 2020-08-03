@@ -15,8 +15,11 @@ db = cs50.SQL("sqlite:///students.db")
 # creat tables in database for name(first middle and last), house and birth
 db.execute("CREATE TABLE students (first TEXT, middle TEXT, last TEXT, house TEXT, birth NUMERIC)")
 
+# get the file
+file = argv[1]
+
 # open csv file for reading
-with open("characters.csv", "r") as data:
+with open(file, "r") as data:
 
     # create a DictReader
     reader = DictReader(data, delimiter=",")
