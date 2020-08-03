@@ -36,7 +36,7 @@ with open(file, "r") as data:
             middle = names[1]
             last = names[2]
         else:
-            middle = "NULL"
+            middle = "NoneL"
             last = names[1]
 
         # convert birth to int

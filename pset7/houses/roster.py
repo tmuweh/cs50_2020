@@ -18,7 +18,7 @@ records = db.execute("SELECT * FROM students WHERE house = ? ORDER BY last, firs
 
 # print records
 for row in records:
-    if row["middle"] == "NULL":
+    if row["middle"] == "None":
         name = row["first"] + " " + row["last"]
     else:
         name = row["first"] + " " + row["middle"] + " " + row["last"]
