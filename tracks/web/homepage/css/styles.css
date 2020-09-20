@@ -1,4 +1,6 @@
-
+body{
+  font-family: Open Sans,Arial,Helvetica,sans-serif;
+}
 
 a:hover {
   color: hotpink;
@@ -7,9 +9,15 @@ a:hover {
 a:active {
   color: blue;
 }
+p {
+  font-family:Fondamento;
+  font-size:20px;
+}
 
 .footer {
+  font-family: Fondamento;
   background-color: #F1F1F1;
   text-align: center;
   padding: 10px;
+  font-size:20px;
 }
