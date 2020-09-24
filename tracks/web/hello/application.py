@@ -1,14 +1,18 @@
-from flask import Flask
+from flask import Flask, render_template, request
+import random
 
 app = Flask(__name__)
 
 @app.route("/")
 def index():
-    return "<h1>Hello, World!</h1>"
+    number = random.randint(1, 10)
+    coin = random.randint(1,2)
+    return render_template("index.html", name="Tangue", number=number, coin=coin)
 @app.route("/goodbye")
 def bye():
     return "GoodBye!"
 
 @app.route("/hello")
 def home():
-    return "Hello, World!"
+    name = request.args.get("name")
+    return render_template("hello.html", name=name)
