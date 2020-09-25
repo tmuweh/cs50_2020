@@ -12,6 +12,11 @@
 
 {% block body %}
      <h1>Grocery Shopping List</h1>
-     <p><a href="/add">Add new Item</a></p>
+     <ul>
+        {% for grocery in grocies %}
+            <li>{{ grocery }}</li>
+        {% endfor%}
+     </ul>
+     <p><a href="/add">Add New Item</a></p>
 
 {% endblock %}
