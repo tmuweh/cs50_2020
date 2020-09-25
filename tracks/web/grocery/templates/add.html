@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block style %}
+    body{
+        color: blue;
+    }
+{% endblock %}
+
+{% block body %}
+     <h1>Add to List</h1>
+     <form action="/add" method="post">
+         <input name="name" type="text">
+         <input id="submit" type="submit">
+     </form>
+
+{% endblock %}
