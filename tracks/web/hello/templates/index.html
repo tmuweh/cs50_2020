@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Hello</title>
-    </head>
-    <body>
-        <h1>Hello, {{ name }}!</h1>
-        <p>Your number is {{number}}</p>
-        {% if coin == 1 %}
-            <h3>You Got a HEAD</h3>
-        {% else %}
-            <h3>You Got a TAIL</h3>
-        {% endif %}
-        <form action="/hello">
-            <input name="name" type="text" />
-            <input type="submit">
-        </form>
-    </body>
-</html>
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1>Hello, {{ name }}!</h1>
+    <p>Your number is {{number}}</p>
+    {% if coin == 1 %}
+        <h3>You Got a HEAD</h3>
+    {% else %}
+        <h3>You Got a TAIL</h3>
+    {% endif %}
+    <form action="/hello">
+        <input name="name" type="text" />
+        <input type="submit">
+    </form>
+{% endblock %}
