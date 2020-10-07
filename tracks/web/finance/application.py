@@ -113,13 +113,59 @@ def logout():
 @login_required
 def quote():
     """Get stock quote."""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        if not symbol:
+            return apology("You must provide a symbol", 403)
+        symbol = symbol.lower()
+        request_data = lookup(symbol)
+        if not request_data:
+            return apology("Must enter a valid Stock Symbol", 403)
+        stock_cost = request_data["price"]
+        stock_name = request_data["name"]
+        stock_symbol = request_data["symbol"]
+        return render_template("quoted.html", stock_name=stock_name, stock_cost=stock_cost, stock_symbol=stock_symbol )
+
+    else:
+        return render_template("quote.html")
+
+
 
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
-    return apology("TODO")
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        # Ensure passwords were submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+        elif not request.form.get("confirm_password"):
+            return apology("must provide password", 403)
+        else:
+            username = request.form.get("username")
+            password = request.form.get("password")
+
+            # Query database for username
+            rows = db.execute("SELECT * FROM users WHERE username = :username", username=username)
+
+            # make sure username doesn't exist
+            print(rows)
+            if len(rows) != 0:
+                return apology("User Already exits", 403)
+            else:
+                # create user
+                successful = db.execute("INSERT INTO users(username, hash) VALUES(:username, :hash)", username=username, hash=generate_password_hash(password))
+                if successful:
+                    return redirect("login")
+                else:
+                    return render_template("register.html", message = "Something went wrong!")
+    else:
+        return render_template("register.html")
 
 
 @app.route("/sell", methods=["GET", "POST"])
