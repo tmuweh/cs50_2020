@@ -51,7 +51,30 @@ def index():
 @login_required
 def buy():
     """Buy shares of stock"""
-    return apology("TODO")
+    if request.method == "POST":
+        symbol = request.form.get("symbol")
+        shares = int(request.form.get("shares"))
+        if not shares or not symbol:
+            return apology("Must provide stock symbol and shares", 403)
+
+        # check for valid symbol and valid shares
+        request_data = lookup(symbol)
+        if not request_data:
+            return apology("Enter a valid Symbol", 403)
+        if shares <= 0:
+            return apology("Shares can not be be zero or less", 403)
+
+        # check user fund and check if they can purchase stocks
+        rows = db.execute("SELECT cash FROM users WHERE id = :user_id", user_id=session["user_id"])
+        user_fund = rows[0]["cash"]
+        stock_fund = float(request_data["price"]) * shares
+        if user_fund < stock_fund:
+            return apology("Inadequate funds to acquire stocks")
+        else:
+            # buy stock
+            pass
+    else:
+        return render_template("buy.html")
 
 
 @app.route("/history")
