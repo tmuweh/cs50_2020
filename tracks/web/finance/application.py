@@ -6,6 +6,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.exceptions import default_exceptions, HTTPException, InternalServerError
 from werkzeug.security import check_password_hash, generate_password_hash
+from datetime import datetime
 
 from helpers import apology, login_required, lookup, usd
 
@@ -71,8 +72,23 @@ def buy():
         if user_fund < stock_fund:
             return apology("Inadequate funds to acquire stocks")
         else:
-            # buy stock
-            pass
+            # check if stock already exist... update
+            shares_present = db.execute("SELECT * FROM stocks, users WHERE users.id = :user_id AND symbol = :symbol", user_id=session["user_id"], symbol=symbol)
+            if len(shares_present) == 1:
+                update = db.execute("UPDATE stocks SET shares = :shares, date = :date WHERE user_id = :user_id AND symbol = :symbol", shares=shares_present[0]["shares"] + shares, date=datetime.timestamp(datetime.now()), user_id=session["user_id"], symbol=symbol)
+                history = db.execute("INSERT INTO history(user_id,symbol, shares) VALUES(:user_id, :symbol, :shares)", user_id=session["user_id"], symbol=symbol, shares=shares)
+                if not update or not history:
+                    return apology("Some error buying these shares", 403)
+
+                return redirect("/")
+
+            # else insert new stock
+            else:
+                insert = db.execute("INSERT INTO stocks(symbol, shares, user_id) VALUES(:symbol, :shares, :user_id)", symbol=symbol, shares=shares, user_id=session["user_id"])
+                history = db.execute("INSERT INTO history(user_id,symbol, shares) VALUES(:user_id, :symbol, :shares)", user_id=session["user_id"], symbol=symbol, shares=shares)
+                if not insert or not history:
+                    return apology("Some error occur why buying stock", 403)
+                return redirect("/")
     else:
         return render_template("buy.html")
 
