@@ -49,8 +49,17 @@ def index():
     stocks = db.execute("SELECT * FROM stocks WHERE 1")
     for stock in stocks:
         session["stocks"][stock['symbol']] = lookup(stock['symbol'])
+    cash = db.execute("SELECT cash from Users WHERE id =:user_id", user_id=session["user_id"])
 
-    return render_template("index.html", stocks=stocks, current_stock_price=session["stocks"])
+    # total value of stock
+    total = 0.0
+    for stock in stocks:
+        print(stock["shares"])
+        # each stock current price
+        current_price = lookup(stock["symbol"])
+        total += stock["shares"] * current_price["price"]
+
+    return render_template("index.html", stocks=stocks, current_stock_price=session["stocks"], cash=cash, total=total)
 
 
 @app.route("/buy", methods=["GET", "POST"])
@@ -81,8 +90,11 @@ def buy():
             shares_present = db.execute("SELECT * FROM stocks, users WHERE users.id = :user_id AND symbol = :symbol", user_id=session["user_id"], symbol=symbol)
             if len(shares_present) == 1:
                 update = db.execute("UPDATE stocks SET shares = :shares, date = :date WHERE user_id = :user_id AND symbol = :symbol", shares=shares_present[0]["shares"] + shares, date=datetime.timestamp(datetime.now()), user_id=session["user_id"], symbol=symbol)
+
+                # update user's cash
+                cash_update = db.execute("Update users SET cash = :cash WHERE id=:user_id", cash=user_fund-stock_fund, user_id=session["user_id"])
                 history = db.execute("INSERT INTO history(user_id,symbol, shares) VALUES(:user_id, :symbol, :shares)", user_id=session["user_id"], symbol=symbol, shares=shares)
-                if not update or not history:
+                if not update or not history or not cash_update:
                     return apology("Some error buying these shares", 403)
 
                 return redirect("/")
@@ -91,7 +103,8 @@ def buy():
             else:
                 insert = db.execute("INSERT INTO stocks(symbol, shares, user_id) VALUES(:symbol, :shares, :user_id)", symbol=symbol, shares=shares, user_id=session["user_id"])
                 history = db.execute("INSERT INTO history(user_id,symbol, shares) VALUES(:user_id, :symbol, :shares)", user_id=session["user_id"], symbol=symbol, shares=shares)
-                if not insert or not history:
+                cash_update = db.execute("Update users SET cash = :cash WHERE id=:user_id", cash=user_fund-stock_fund, user_id=session["user_id"])
+                if not insert or not history or not cash_update:
                     return apology("Some error occur why buying stock", 403)
                 return redirect("/")
     else:
