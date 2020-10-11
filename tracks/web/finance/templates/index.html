@@ -18,11 +18,11 @@
           <tbody>
               {% for stock in stocks %}
                <tr>
-                   <td>{{stock["symbol"]}}</td>
-                   <td>{{stock["name"]}}</td>
+                   <td>{{current_stock_price[stock["symbol"]]["symbol"]}}</td>
+                   <td>{{current_stock_price[stock["symbol"]]["name"]}}</td>
                    <td>{{stock["shares"]}}</td>
-                    <td>3</td>
-                   <td>3</td>
+                    <td>{{current_stock_price[stock["symbol"]]["price"]}}</td>
+                   <td>{{ current_stock_price[stock["symbol"]]["price"] * stock["shares"]}}</td>
                </tr>
               {% endfor %}
           </tbody>

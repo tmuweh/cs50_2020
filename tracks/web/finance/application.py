@@ -45,9 +45,12 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
+    session["stocks"] = {}
     stocks = db.execute("SELECT * FROM stocks WHERE 1")
+    for stock in stocks:
+        session["stocks"][stock['symbol']] = lookup(stock['symbol'])
 
-    return render_template("index.html", stocks=stocks)
+    return render_template("index.html", stocks=stocks, current_stock_price=session["stocks"])
 
 
 @app.route("/buy", methods=["GET", "POST"])
