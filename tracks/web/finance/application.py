@@ -244,7 +244,23 @@ def sell():
         elif int(shares) > stocks[0]["shares"]:
             return apology("Unsufficient shares to sell", 403)
         else:
-            return "SOLD!"
+            "sell stock and update affected dbs"
+
+            # user money and shares
+            current_price = lookup(stocks[0]["symbol"])
+            user_data = db.execute("SELECT * FROM users WHERE id=:user_id", user_id=session["user_id"])
+            update_user_details = db.execute("UPDATE users SET cash = :cash WHERE id = :user_id",cash=user_data[0]["cash"]+ (int(shares)*current_price["price"]), user_id=session["user_id"])
+
+            # stock
+            update_stocks = db.execute("UPDATE stocks SET shares=:shares WHERE user_id=:user_id", shares=stocks[0]["shares"]-int(shares), user_id=session["user_id"])
+
+            # history
+            add_history = db.execute("INSERT INTO history(user_id, symbol, shares, time) VALUES(:user_id, :symbol, :shares, :time)", user_id=session["user_id"], symbol=symbol, shares= 0-stocks[0]["shares"], time=datetime.timestamp(datetime.now()))
+
+            if not update_user_details or not update_stocks or not add_history:
+                return apology("Failed to sell. Sorry!")
+            else:
+                return redirect("/")
     else:
         return render_template("sell.html", symbols=symbols)
 
