@@ -54,7 +54,6 @@ def index():
     # total value of stock
     total = 0.0
     for stock in stocks:
-        print(stock["shares"])
         # each stock current price
         current_price = lookup(stock["symbol"])
         total += stock["shares"] * current_price["price"]
@@ -93,7 +92,7 @@ def buy():
 
                 # update user's cash
                 cash_update = db.execute("Update users SET cash = :cash WHERE id=:user_id", cash=user_fund-stock_fund, user_id=session["user_id"])
-                history = db.execute("INSERT INTO history(user_id,symbol, shares) VALUES(:user_id, :symbol, :shares)", user_id=session["user_id"], symbol=symbol, shares=shares)
+                history = db.execute("INSERT INTO history(user_id,symbol, shares, price) VALUES(:user_id, :symbol, :shares, :price)", user_id=session["user_id"], symbol=symbol, shares=shares, price=float(request_data["price"]))
                 if not update or not history or not cash_update:
                     return apology("Some error buying these shares", 403)
 
@@ -102,7 +101,7 @@ def buy():
             # else insert new stock
             else:
                 insert = db.execute("INSERT INTO stocks(symbol, shares, user_id) VALUES(:symbol, :shares, :user_id)", symbol=symbol, shares=shares, user_id=session["user_id"])
-                history = db.execute("INSERT INTO history(user_id,symbol, shares) VALUES(:user_id, :symbol, :shares)", user_id=session["user_id"], symbol=symbol, shares=shares)
+                history = db.execute("INSERT INTO history(user_id,symbol, shares, price) VALUES(:user_id, :symbol, :shares, :price)", user_id=session["user_id"], symbol=symbol, shares=shares, price=request_data["price"])
                 cash_update = db.execute("Update users SET cash = :cash WHERE id=:user_id", cash=user_fund-stock_fund, user_id=session["user_id"])
                 if not insert or not history or not cash_update:
                     return apology("Some error occur why buying stock", 403)
@@ -115,8 +114,9 @@ def buy():
 @login_required
 def history():
     """Show history of transactions"""
-    return apology("TODO")
+    histories = db.execute("SELECT * FROM history WHERE user_id=:user_id", user_id=session['user_id'])
 
+    return render_template("history.html", histories=histories)
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -247,15 +247,20 @@ def sell():
             "sell stock and update affected dbs"
 
             # user money and shares
-            current_price = lookup(stocks[0]["symbol"])
+            current_stock = lookup(stocks[0]["symbol"])
             user_data = db.execute("SELECT * FROM users WHERE id=:user_id", user_id=session["user_id"])
-            update_user_details = db.execute("UPDATE users SET cash = :cash WHERE id = :user_id",cash=user_data[0]["cash"]+ (int(shares)*current_price["price"]), user_id=session["user_id"])
+            cash = user_data[0]["cash"] + (int(shares) * current_stock["price"])
+            update_user_details = db.execute("UPDATE users SET cash = :cash WHERE id = :user_id",cash=cash, user_id=session["user_id"])
 
             # stock
-            update_stocks = db.execute("UPDATE stocks SET shares=:shares WHERE user_id=:user_id", shares=stocks[0]["shares"]-int(shares), user_id=session["user_id"])
+            if int(shares) == stocks[0]["shares"]:
+                #delete stock if all shares are sold
+                update_stocks = db.execute("DELETE FROM stocks WHERE symbol=:symbol", symbol=symbol.lower())
+            else:
+                update_stocks = db.execute("UPDATE stocks SET shares=:shares WHERE user_id=:user_id", shares=stocks[0]["shares"]-int(shares), user_id=session["user_id"])
 
             # history
-            add_history = db.execute("INSERT INTO history(user_id, symbol, shares, time) VALUES(:user_id, :symbol, :shares, :time)", user_id=session["user_id"], symbol=symbol, shares= 0-stocks[0]["shares"], time=datetime.timestamp(datetime.now()))
+            add_history = db.execute("INSERT INTO history(user_id, symbol, shares, price) VALUES(:user_id, :symbol, :shares, :price)", user_id=session["user_id"], symbol=symbol, shares= 0-stocks[0]["shares"], price=current_stock["price"])
 
             if not update_user_details or not update_stocks or not add_history:
                 return apology("Failed to sell. Sorry!")
