@@ -260,7 +260,7 @@ def sell():
                 update_stocks = db.execute("UPDATE stocks SET shares=:shares WHERE user_id=:user_id", shares=stocks[0]["shares"]-int(shares), user_id=session["user_id"])
 
             # history
-            add_history = db.execute("INSERT INTO history(user_id, symbol, shares, price) VALUES(:user_id, :symbol, :shares, :price)", user_id=session["user_id"], symbol=symbol, shares= 0-stocks[0]["shares"], price=current_stock["price"])
+            add_history = db.execute("INSERT INTO history(user_id, symbol, shares, price) VALUES(:user_id, :symbol, :shares, :price)", user_id=session["user_id"], symbol=symbol, shares= 0-int(shares), price=current_stock["price"])
 
             if not update_user_details or not update_stocks or not add_history:
                 return apology("Failed to sell. Sorry!")
