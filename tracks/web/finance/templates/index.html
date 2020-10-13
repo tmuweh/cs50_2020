@@ -19,11 +19,11 @@
               {% for stock in stocks %}
 
                <tr>
-                   <td>{{current_stock_price[stock["symbol"]]["symbol"]}}</td>
-                   <td>{{current_stock_price[stock["symbol"]]["name"]}}</td>
+                   <td>{{current_stock[stock["symbol"]]["symbol"]}}</td>
+                   <td>{{current_stock[stock["symbol"]]["name"]}}</td>
                    <td>{{stock["shares"]}}</td>
-                   <td>${{ '{:,.2f}'.format(current_stock_price[stock["symbol"]]["price"]) }}</td>
-                   <td>${{ '{:,.2f}'.format(current_stock_price[stock["symbol"]]["price"] * stock["shares"]) }}</td>
+                   <td>${{ '{:,.2f}'.format(current_stock[stock["symbol"]]["price"]) }}</td>
+                   <td>${{ '{:,.2f}'.format(current_stock[stock["symbol"]]["price"] * stock["shares"]) }}</td>
                </tr>
               {% endfor %}
               <tr>
@@ -38,7 +38,7 @@
                   <td></td>
                   <td></td>
                   <td></td>
-                  <td>${{ '{:,.2f}'.format(cash[0]["cash"] + total) }}</td>
+                  <td><b>${{ '{:,.2f}'.format(cash[0]["cash"] + total) }}</b></td>
               </tr>
           </tbody>
     </table>

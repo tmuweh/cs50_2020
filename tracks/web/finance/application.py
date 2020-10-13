@@ -45,10 +45,10 @@ if not os.environ.get("API_KEY"):
 @login_required
 def index():
     """Show portfolio of stocks"""
-    session["stocks"] = {}
-    stocks = db.execute("SELECT * FROM stocks WHERE 1")
+    current_stock = {}
+    stocks = db.execute("SELECT * FROM stocks WHERE user_id=:user_id", user_id=session["user_id"])
     for stock in stocks:
-        session["stocks"][stock['symbol']] = lookup(stock['symbol'])
+        current_stock[stock['symbol']] = lookup(stock['symbol'])
     cash = db.execute("SELECT cash from Users WHERE id =:user_id", user_id=session["user_id"])
 
     # total value of stock
@@ -58,7 +58,7 @@ def index():
         current_price = lookup(stock["symbol"])
         total += stock["shares"] * current_price["price"]
 
-    return render_template("index.html", stocks=stocks, current_stock_price=session["stocks"], cash=cash, total=total)
+    return render_template("index.html", stocks=stocks, current_stock=current_stock, cash=cash, total=total)
 
 
 @app.route("/buy", methods=["GET", "POST"])
