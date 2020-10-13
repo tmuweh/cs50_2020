@@ -17,7 +17,7 @@
           <tbody>
                 {% for history in histories %}
                     <tr>
-                        <td>{{history["symbol"]}}</td>
+                        <td>{{ history["symbol"].upper() }}</td>
                         <td>{{history["shares"]}}</td>
                         <td>{{history["price"]}}</td>
                         <td>{{history["time"]}}</td>
