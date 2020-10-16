@@ -146,6 +146,7 @@ def login():
 
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
+        session["user_name"] = rows[0]["username"]
 
         # Redirect user to home page
         return redirect("/")
@@ -174,7 +175,7 @@ def quote():
         symbol = request.form.get("symbol")
         if not symbol:
             return apology("You must provide a symbol", 403)
-        symbol = symbol.lower()
+        symbol = symbol.upper()
         request_data = lookup(symbol)
         if not request_data:
             return apology("Must enter a valid Stock Symbol", 403)
@@ -235,7 +236,7 @@ def sell():
         symbol = request.form.get("symbol")
         shares = request.form.get("shares")
 
-        stocks = db.execute("SELECT * from stocks WHERE symbol=:symbol AND user_id=:user_id", symbol=symbol.lower(), user_id=session["user_id"])
+        stocks = db.execute("SELECT * from stocks WHERE symbol=:symbol AND user_id=:user_id", symbol=symbol.upper(), user_id=session["user_id"])
 
         # check for valid input
         if not symbol or not shares or int(shares) <= 0:
@@ -255,7 +256,7 @@ def sell():
             # stock
             if int(shares) == stocks[0]["shares"]:
                 #delete stock if all shares are sold
-                update_stocks = db.execute("DELETE FROM stocks WHERE symbol=:symbol", symbol=symbol.lower())
+                update_stocks = db.execute("DELETE FROM stocks WHERE symbol=:symbol", symbol=symbol.upper())
             else:
                 update_stocks = db.execute("UPDATE stocks SET shares=:shares WHERE user_id=:user_id", shares=stocks[0]["shares"]-int(shares), user_id=session["user_id"])
 
