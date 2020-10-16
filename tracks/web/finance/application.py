@@ -8,7 +8,7 @@ from werkzeug.exceptions import default_exceptions, HTTPException, InternalServe
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 
-from helpers import apology, login_required, lookup, usd
+from helpers import apology, login_required, lookup, usd, get_int
 
 # Configure application
 app = Flask(__name__)
@@ -70,8 +70,8 @@ def buy():
 
         # save symbols as uppercase string
         symbol = symbol.upper()
-
         shares = request.form.get("shares")
+        shares = get_int(shares)
         if not shares or not symbol:
             return apology("Must provide stock symbol and shares", 403)
         shares = int(shares)
@@ -239,6 +239,7 @@ def sell():
     if request.method == "POST":
         symbol = request.form.get("symbol")
         shares = request.form.get("shares")
+        shares = get_int(shares)
 
         stocks = db.execute("SELECT * from stocks WHERE symbol=:symbol AND user_id=:user_id", symbol=symbol.upper(), user_id=session["user_id"])
 

@@ -61,3 +61,11 @@ def lookup(symbol):
 def usd(value):
     """Format value as USD."""
     return f"${value:,.2f}"
+    
+def get_int(value):
+    """ convert form input to int"""
+    try:
+        return int(value)
+    except (ValueError):
+        return None
+    
