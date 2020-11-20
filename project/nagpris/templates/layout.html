@@ -40,14 +40,14 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="#">Services</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="#">Contact</a>
           </li>
+           <form class="form-inline my-2 my-lg-0" method="post">
+              <input  id="search" class="form-control mr-sm-2" type="search" placeholder="Search..." aria-label="Search">
+           </form>
           {% if session.user_id %}
           <li class="nav-item">
             <a class="nav-link" href="#">Logout</a>
