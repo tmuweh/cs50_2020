@@ -6,7 +6,8 @@
 
 {% block main %}
     <div class="row">
-        <div class="col-sm-6">
+        <div class="col-sm-4"></div>
+        <div class="col-sm-4">
             <form action="/login" method="post">
                 <div class="form-group">
                     <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
@@ -15,7 +16,7 @@
                     <input class="form-control" name="password" placeholder="Password" type="password">
                 </div>
                 <button class="btn btn-primary" type="submit">Log In</button>
-                <span><a href="/register">No Account? Register!</a></span>
+                <span>No Account? <a href="/register">Register!</a></span>
             </form>
         </div>
     </div>

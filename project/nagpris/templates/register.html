@@ -5,25 +5,34 @@
 {% endblock %}
 
 {% block main %}
-    <form action="/register" method="post">
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="first_name" placeholder="First Name" type="text">
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div clas="col-sm-6">
+            <form action="/register" method="post">
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="first_name" placeholder="First Name" type="text">
+                </div>
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="last_name" placeholder="Last Name" type="text">
+                </div>
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
+                </div>
+                <div class="form-group">
+                    <input  class="form-control" id="password" name="password" placeholder="Password" type="password">
+                </div>
+                <div class="form-group">
+                    <span id="msg" style="color:red;"></span>
+                    <input onkeyup="passcheck()" class="form-control" id="confirm" name="confirm_password" placeholder="Confirm Password" type="password">
+
+                </div>
+                <button class="btn btn-primary" type="submit">Register</button>
+                <span >Already have an account? <a href="/login">Login</a></span>
+            </form>
         </div>
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="last_name" placeholder="Last Name" type="text">
-        </div>
-        <div class="form-group">
-            <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
-        </div>
-        <div class="form-group">
-            <input class="form-control" id="password" name="password" placeholder="Password" type="password">
-        </div>
-        <div class="form-group">
-            <input onkeyup="passcheck()" class="form-control" id="confirm" name="confirm_password" placeholder="Confirm Password" type="password">
-            <span id="msg"></span>
-        </div>
-        <button class="btn btn-primary" type="submit">Register</button>
-    </form>
+    </div>
+
+
 {% endblock %}
 
 
@@ -38,7 +47,11 @@
          var confirm = document.getElementById("confirm").value;
          console.log(password + " "+ confirm)
          if (password != confirm){
-             document.getElementById("msg").innerHTML = "Password Don't Match";
+             document.getElementById("msg").innerHTML = "Password missed match!";
+             var password_field = document.getElementById("password");
+             var att = document.createAttribute("onkeyup");
+             att.value = "passcheck()";
+             password_field.setAttributeNode(att);
          }else{
              document.getElementById("msg").innerHTML= "";
          }
