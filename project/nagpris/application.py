@@ -4,6 +4,8 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
+from functools import wraps
+
 
 app = Flask(__name__)
 
@@ -86,3 +88,29 @@ def login():
             return redirect("/")
     else:
         return render_template("login.html")
+
+
+@app.route("/sell", methods=["GET", "POST"])
+
+def sell():
+
+    if request.method == "POST":
+        pass
+    else:
+        rows = db.execute("SELECT * FROM category WHERE 1")
+
+        return render_template("sell.html", rows=rows)
+
+
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    http://flask.pocoo.org/docs/1.0/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function

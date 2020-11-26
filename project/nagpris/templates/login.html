@@ -5,10 +5,15 @@
 {% endblock %}
 
 {% block main %}
+
     <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
-            <form action="/login" method="post">
+            <lable for="form">
+                <h1>Log In</h1>
+                <br>
+            </lable>
+            <form action="/login" method="post" id="form">
                 <div class="form-group">
                     <input autocomplete="off" autofocus class="form-control" name="username" placeholder="Username" type="text">
                 </div>

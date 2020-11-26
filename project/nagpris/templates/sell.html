@@ -1,0 +1,58 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Register
+{% endblock %}
+
+{% block main %}
+    <div class="row">
+        <div class="col-sm-4"></div>
+        <div clas="col-sm-6">
+             <lable for="form">
+                <h1>Post something for sale</h1>
+                <br>
+            </lable>
+            <form action="/sell" method="post" id="form">
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="product_name" placeholder="Name" type="text" required>
+                </div>
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="unit_price" placeholder="Unit Price" type="text" required>
+                </div>
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="quantity" placeholder="Quantity" type="text" required>
+                </div>
+                <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <label class="input-group-text" for="category">Category</label>
+                  </div>
+                  <select class="custom-select" id="category" name="category">
+                      <optionA>{{rows[0]["name"]}}</optionA>
+                    {% for row in rows %}
+                        <option> {{ row["name"] }}</option>
+                    {% endfor %}
+                  </select>
+                </div>
+               <div class="input-group mb-3">
+                  <div class="input-group-prepend">
+                    <button class="btn btn-outline-secondary" type="button" id="image">Upload</button>
+                  </div>
+                  <div class="custom-file">
+                    <input type="file" class="custom-file-input" id="image" aria-describedby="image">
+                    <label class="custom-file-label" for="image">Choose file</label>
+                  </div>
+                </div>
+                <div class="form-group">
+                    <label for="description">Describe Product</label>
+                    <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                </div>
+                <button class="btn btn-primary" type="submit">Submit</button>
+            </form>
+        </div>
+
+    </div>
+<br>
+<br>
+<br>
+
+{% endblock %}
