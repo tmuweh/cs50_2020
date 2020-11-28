@@ -6,12 +6,17 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 from functools import wraps
 
+import os
+from werkzeug.utils import secure_filename
+
+IMAGE_UPLOADS = '/static/images/products/'
 
 app = Flask(__name__)
 
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.config["IMAGE_UPLOADS"] = IMAGE_UPLOADS
 
 
 #Ensure responses aren't cached
@@ -91,10 +96,17 @@ def login():
 
 
 @app.route("/sell", methods=["GET", "POST"])
-
 def sell():
 
     if request.method == "POST":
+        image = request.files["image"]
+        if image.filename == "":
+            pass
+        else:
+            image_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
+            print(image_path)
+            filename = secure_filename(image.filename)
+            image.save(image_path)
         pass
     else:
         rows = db.execute("SELECT * FROM category WHERE 1")

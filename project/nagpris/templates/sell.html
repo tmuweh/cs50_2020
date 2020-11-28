@@ -27,26 +27,28 @@
                     <label class="input-group-text" for="category">Category</label>
                   </div>
                   <select class="custom-select" id="category" name="category">
-                      <optionA>{{rows[0]["name"]}}</optionA>
-                    {% for row in rows %}
-                        <option> {{ row["name"] }}</option>
-                    {% endfor %}
+                      <optionA>{{rows[2]["name"]}}</optionA>
+                      {% for row in rows %}
+                      <option> {{ row["name"] }}</option>
+                      {% endfor %}
                   </select>
                 </div>
                <div class="input-group mb-3">
-                  <div class="input-group-prepend">
-                    <button class="btn btn-outline-secondary" type="button" id="image">Upload</button>
-                  </div>
                   <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="image" aria-describedby="image">
+                    <input type="file" class="custom-file-input" id="image"  accept="image/*"  aria-describedby="image" onchange="loadFile(event)" style="display: none;">
                     <label class="custom-file-label" for="image">Choose file</label>
                   </div>
+                </div>
+                <div class="input-group mb-3">
+                    <span><image id="output" width="100"></span>
                 </div>
                 <div class="form-group">
                     <label for="description">Describe Product</label>
                     <textarea class="form-control" id="description" name="description" rows="3"></textarea>
                 </div>
-                <button class="btn btn-primary" type="submit">Submit</button>
+                <div class="form-group">
+                    <button class="btn btn-primary" type="submit">Submit</button>
+                </div>
             </form>
         </div>
 
@@ -54,5 +56,16 @@
 <br>
 <br>
 <br>
+
+{% endblock %}
+
+{% block jsblock %}
+
+<script>
+    var loadFile = function(event) {
+    	var image = document.getElementById('output');
+    	image.src = URL.createObjectURL(event.target.files[0]);
+    };
+</script>
 
 {% endblock %}
