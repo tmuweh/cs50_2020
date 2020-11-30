@@ -12,7 +12,7 @@
                 <h1>Post something for sale</h1>
                 <br>
             </lable>
-            <form action="/sell" method="post" id="form">
+            <form action="/sell" method="post" id="form" enctype="multipart/form-data">
                 <div class="form-group">
                     <input autocomplete="off" autofocus class="form-control" name="product_name" placeholder="Name" type="text" required>
                 </div>
@@ -34,10 +34,7 @@
                   </select>
                 </div>
                <div class="input-group mb-3">
-                  <div class="custom-file">
-                    <input type="file" class="custom-file-input" id="image"  accept="image/*"  aria-describedby="image" onchange="loadFile(event)" style="display: none;">
-                    <label class="custom-file-label" for="image">Choose file</label>
-                  </div>
+                    <input type="file"  id="image"  name="image" accept="image/*"  aria-describedby="image" onchange="loadFile(event)" >
                 </div>
                 <div class="input-group mb-3">
                     <span><image id="output" width="100"></span>

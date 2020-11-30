@@ -9,14 +9,14 @@ from functools import wraps
 import os
 from werkzeug.utils import secure_filename
 
-IMAGE_UPLOADS = '/static/images/products/'
+IMAGE_UPLOADS = 'static/images/products/'
 
 app = Flask(__name__)
 
 
 # Ensure templates are auto-reloaded
 app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config["IMAGE_UPLOADS"] = IMAGE_UPLOADS
+app.config["IMAGE_FOLDER"] = IMAGE_UPLOADS
 
 
 #Ensure responses aren't cached
@@ -32,6 +32,7 @@ def after_request(response):
 app.config["SESSION_FILE_DIR"] = mkdtemp()
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.debug = True
 Session(app)
 
 
@@ -97,17 +98,26 @@ def login():
 
 @app.route("/sell", methods=["GET", "POST"])
 def sell():
-
     if request.method == "POST":
+        product_name = request.form.get("product_name")
+        unit_price = request.form.get("unit_price")
+        quantity = request.form.get("quantity")
+        category = request.form.get("category")
         image = request.files["image"]
+        description = request.form.get("description")
+        
+        # if no file was submitted
         if image.filename == "":
-            pass
+            return render_template("sell.html", message="Please upload a clear image of the product")
         else:
-            image_path = os.path.join(app.config['UPLOAD_FOLDER'], image.filename)
-            print(image_path)
+            # rename image file
+            # get image absolute path
+            image_path = os.path.join(app.config['IMAGE_FOLDER'], image.filename)
             filename = secure_filename(image.filename)
-            image.save(image_path)
-        pass
+            # save image
+            image.save(image_path)¨
+            
+            return "Success!"
     else:
         rows = db.execute("SELECT * FROM category WHERE 1")
 
