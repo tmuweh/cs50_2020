@@ -106,6 +106,8 @@ def sell():
         unit_price = request.form.get("unit_price")
         quantity = request.form.get("quantity")
         category = request.form.get("category")
+        cat_id = db.execute("SELECT cat_id FROM category WHERE name = :name",
+                                    name=category)[0]["cat_id"]
         image = request.files["image"]
         description = request.form.get("description")
 
@@ -114,21 +116,36 @@ def sell():
             return render_template("sell.html", message="Please upload a clear image of the product")
         else:
             # rename image file
-            print(image.filename)
             image.filename = img_name(image.filename)[0] + "_" + str(int(ticks)) + "." + img_name(image.filename)[1]
-            # get image absolute path
-            image_path = os.path.join(app.config['IMAGE_FOLDER'], image.filename)
-            filename = secure_filename(image.filename)
-            # save image
-            image.save(image_path)
 
-            return "Success!"
+            # secure name of image
+            filename = secure_filename(image.filename)
+
+            # get image absolute path
+            image_path = os.path.join(app.config['IMAGE_FOLDER'], filename)
+
+            # Add product to db
+            success = db.execute("INSERT INTO products(product_name, unit_price, quantity, cat_id, user_id, description) VALUES(:product_name, :unit_price, :quantity, :cat_id, :user_id, :description)",
+                                                        product_name=product_name, unit_price=unit_price, quantity=quantity, cat_id=cat_id, user_id=session['user_id'], description=description)
+            if True:
+                # save image
+                product_id=db.execute("SELECT product_id FROM products WHERE product_name=:product_name",
+                                                       product_name=product_name)[0]["product_id"]
+                stored = db.execute("INSERT INTO images(img_url, product_id) VALUES(:img_url, :product_id)",
+                                    img_url=image_path, product_id=product_id)
+                if stored:
+                    image.save(image_path)
+                    return render_template("index.html", message="Product added!")
+                else:
+                    return render_template("index.html", message="Couldn't save image")
+            else:
+                return render_template("index.html", message="Error adding product.")
     else:
         rows = db.execute("SELECT * FROM category WHERE 1")
 
         return render_template("sell.html", rows=rows)
 
-""" get extension of images"""
+""" get name and extension of images """
 def img_name(name):
     # returns a list of two strings... [0] name and [1] extension
     list = name.split(".")
