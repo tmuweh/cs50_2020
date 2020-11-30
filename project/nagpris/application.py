@@ -8,6 +8,9 @@ from functools import wraps
 
 import os
 from werkzeug.utils import secure_filename
+import time
+
+ticks = time.time()
 
 IMAGE_UPLOADS = 'static/images/products/'
 
@@ -105,23 +108,32 @@ def sell():
         category = request.form.get("category")
         image = request.files["image"]
         description = request.form.get("description")
-        
+
         # if no file was submitted
         if image.filename == "":
             return render_template("sell.html", message="Please upload a clear image of the product")
         else:
             # rename image file
+            print(image.filename)
+            image.filename = img_name(image.filename)[0] + "_" + str(int(ticks)) + "." + img_name(image.filename)[1]
             # get image absolute path
             image_path = os.path.join(app.config['IMAGE_FOLDER'], image.filename)
             filename = secure_filename(image.filename)
             # save image
-            image.save(image_path)¨
-            
+            image.save(image_path)
+
             return "Success!"
     else:
         rows = db.execute("SELECT * FROM category WHERE 1")
 
         return render_template("sell.html", rows=rows)
+
+""" get extension of images"""
+def img_name(name):
+    # returns a list of two strings... [0] name and [1] extension
+    list = name.split(".")
+    return list
+
 
 
 def login_required(f):
