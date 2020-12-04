@@ -28,8 +28,8 @@
                   </div>
                   <select class="custom-select" id="category" name="category">
                       <optionA>{{rows[2]["name"]}}</optionA>
-                      {% for row in rows %}
-                      <option> {{ row["name"] }}</option>
+                      {% for category in categories %}
+                      <option> {{ category["name"] }}</option>
                       {% endfor %}
                   </select>
                 </div>

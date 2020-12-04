@@ -11,9 +11,9 @@
 
         <h1 class="my-4">Nag Pris</h1>
         <div class="list-group">
-          <a href="#" class="list-group-item">Category 1</a>
-          <a href="#" class="list-group-item">Category 2</a>
-          <a href="#" class="list-group-item">Category 3</a>
+          {% for category in categories %}
+            <a href="{{category['name'].lower()}}" class="list-group-item">{{category['name']}}</a>
+          {% endfor %}
         </div>
     </div>
     <!-- /.col-lg-3 -->

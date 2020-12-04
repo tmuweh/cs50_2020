@@ -41,13 +41,15 @@ Session(app)
 
 db = SQL("sqlite:///data.db")
 
+categories = db.execute("SELECT * FROM category WHERE 1")
+
 @app.route("/")
 def index():
 
     products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id")
-
     if products:
-        return render_template("index.html", products=products)
+        categories = db.execute("SELECT * FROM category WHERE 1")
+        return render_template("index.html", products=products, categories=categories)
 
 
 @app.route("/logout")
@@ -145,9 +147,9 @@ def sell():
             else:
                 return render_template("index.html", message="Error adding product.")
     else:
-        rows = db.execute("SELECT * FROM category WHERE 1")
 
-        return render_template("sell.html", rows=rows)
+        categories = db.execute("SELECT * FROM category WHERE 1")
+        return render_template("sell.html", categories=categories)
 
 """ get name and extension of images """
 def img_name(name):
