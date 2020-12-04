@@ -48,18 +48,24 @@ def index():
 
     # setup filter for displayed products
     f = request.args
-
     if f:
-        cat_id = db.execute("SELECT cat_id FROM category WHERE name = :name", name=f['f'].capitalize())
-        if cat_id:
-            print(cat_id)
-            products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id AND cat_id = :cat_id", cat_id=cat_id[0]["cat_id"])
+        if 'search' in f:
+            products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id AND product_name LIKE :name ", name=f["search"])
+        else:
+            cat_id = db.execute("SELECT cat_id FROM category WHERE name = :name", name=f['f'].capitalize())
+            if cat_id:
+                products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id AND cat_id = :cat_id", cat_id=cat_id[0]["cat_id"])
     else:
         products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id")
 
     categories = db.execute("SELECT * FROM category WHERE 1")
     return render_template("index.html", products=products, categories=categories)
 
+
+@app.route("/search", methods=["GET"])
+def search():
+    q = request.args
+    print(q)
 
 @app.route("/logout")
 def logout():
@@ -68,6 +74,7 @@ def logout():
     session.clear()
 
     return redirect("/")
+
 
 
 @app.route("/register", methods=["GET", "POST"])
