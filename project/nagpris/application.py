@@ -44,7 +44,11 @@ db = SQL("sqlite:///data.db")
 @app.route("/")
 def index():
 
-    return render_template("index.html")
+    products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id")
+
+    if products:
+        return render_template("index.html", products=products)
+
 
 @app.route("/logout")
 def logout():

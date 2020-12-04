@@ -25,7 +25,7 @@
   <!-- Navigation -->
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
-      <a class="navbar-brand" href="#">NAG PRIS</a>
+      <a class="navbar-brand" href="/">NAG PRIS</a>
       <form class="form-inline col-md-9" method="post">
         <input  id="search" class="form-control col-md-9" type="search" placeholder="Search..." aria-label="Search">
 
@@ -36,7 +36,7 @@
       <div class="collapse navbar-collapse" id="navbarResponsive">
         <ul class="navbar-nav ml-auto">
           <li class="nav-item">
-            <a class="nav-link" href="#">About</a>
+            <a class="nav-link" href="/how-to">how to</a>
           </li>
           {% if session.user_id %}¨
           <li class="nav-item">
@@ -74,12 +74,9 @@
   </main>
 
   <!-- Footer -->
-  <footer class="py-5 bg-dark fixed-bottom">
-    <div class="container">
-      <p class="m-0 text-center text-white">Copyright &copy; NagPris <span id="demo"></span> | All Rights Reserved</p>
-    </div>
-    <!-- /.container -->
-  </footer>
+  <div class="navbar fixed-bottom navbar-dark bg-dark footer">
+    <p class="text-center">Copyright &copy; NagPris <span id="demo"></span> | All Rights Reserved</p>
+  </div>
 
   <!-- Bootstrap core JavaScript -->
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
