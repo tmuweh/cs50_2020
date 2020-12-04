@@ -46,10 +46,19 @@ categories = db.execute("SELECT * FROM category WHERE 1")
 @app.route("/")
 def index():
 
-    products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id")
-    if products:
-        categories = db.execute("SELECT * FROM category WHERE 1")
-        return render_template("index.html", products=products, categories=categories)
+    # setup filter for displayed products
+    f = request.args
+
+    if f:
+        cat_id = db.execute("SELECT cat_id FROM category WHERE name = :name", name=f['f'].capitalize())
+        if cat_id:
+            print(cat_id)
+            products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id AND cat_id = :cat_id", cat_id=cat_id[0]["cat_id"])
+    else:
+        products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id")
+
+    categories = db.execute("SELECT * FROM category WHERE 1")
+    return render_template("index.html", products=products, categories=categories)
 
 
 @app.route("/logout")
