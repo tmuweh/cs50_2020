@@ -62,11 +62,6 @@ def index():
     return render_template("index.html", products=products, categories=categories)
 
 
-@app.route("/search", methods=["GET"])
-def search():
-    q = request.args
-    print(q)
-
 @app.route("/logout")
 def logout():
 
@@ -173,6 +168,11 @@ def sell():
 def product_info():
     product_id = request.args
     print(product_id)
+    product_info = db.execute("SELECT * FROM products JOIN images WHERE images.product_id = products.product_id AND products.product_id = :product_id", product_id=product_id["n"])
+    if product_info:
+        return render_template("product.html", product_info=product_info)
+    else:
+        return redirect("/")
 
 
 """ get name and extension of images """

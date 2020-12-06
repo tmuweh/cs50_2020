@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    {{product_info[0]["product_name"]}}
+{% endblock %}
+
+{% block main %}
+
+    <h1>{{product_info[0]["product_name"]}}</h1>
+    <img src="{{product_info[0]['img_url']}}" class="img-fluid" alt="Responsive image">
+    <p>{{product_info[0]["description"]}}</p>
+    <h5>${{ product_info[0]['unit_price'] }}</h5>
+    <button type="button" class="btn btn-info" >Add to Cart</button>
+    <button type="button" class="btn btn-light" >Buy Now</button>
+
+{% endblock %}
