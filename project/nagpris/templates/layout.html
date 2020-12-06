@@ -46,8 +46,17 @@
             <a class="nav-link" href="/sell">Sell</a>
           </li>
           <li class="nav-item">
+            <button type="button" class="btn btn-light">
+              Cart <span class="badge badge-info">0</span>
+              <span class="sr-only">items in cart</span>
+            </button>
+          </li>
+          <li class="nav-item">
+            &nbsp;
+          </li>
+          <li class="nav-item">
             <div class="dropdown">
-              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{session.first_name.capitalize()}}
               </button>
               <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -63,13 +72,13 @@
           <li class="nav-item">
             <a class="nav-link" href="/register">Register</a>
           </li>
-          {% endif %}
           <li class="nav-item">
-            <button type="button" class="btn btn-primary">
+            <button type="button" class="btn btn-light">
               Cart <span class="badge badge-info">0</span>
               <span class="sr-only">items in cart</span>
             </button>
           </li>
+          {% endif %}
         </ul>
       </div>
     </div>

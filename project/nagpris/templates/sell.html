@@ -27,7 +27,7 @@
                     <label class="input-group-text" for="category">Category</label>
                   </div>
                   <select class="custom-select" id="category" name="category">
-                      <optionA>{{rows[2]["name"]}}</optionA>
+                      <option>{{categories[2]["name"]}}</option>
                       {% for category in categories %}
                       <option> {{ category["name"] }}</option>
                       {% endfor %}

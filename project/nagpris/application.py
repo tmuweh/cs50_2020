@@ -1,5 +1,5 @@
 from cs50 import SQL
-from flask import Flask, render_template, request, redirect, session
+from flask import g, Flask, render_template, request, redirect, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
@@ -43,6 +43,21 @@ db = SQL("sqlite:///data.db")
 
 categories = db.execute("SELECT * FROM category WHERE 1")
 
+""" lOGIN REQUIRED DECORATOR """
+def login_required(f):
+    """
+    Decorate routes to require login.
+
+    http://flask.pocoo.org/docs/1.0/patterns/viewdecorators/
+    """
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session.get("user_id") is None:
+            return redirect("/login")
+        return f(*args, **kwargs)
+    return decorated_function
+
+
 @app.route("/")
 def index():
 
@@ -50,7 +65,7 @@ def index():
     f = request.args
     if f:
         if 'search' in f:
-            products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id AND product_name LIKE :name ", name=f["search"])
+            products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id AND product_name LIKE :name ", name="%" + f["search"]+ "%")
         else:
             cat_id = db.execute("SELECT cat_id FROM category WHERE name = :name", name=f['f'].capitalize())
             if cat_id:
@@ -118,6 +133,7 @@ def login():
 
 
 @app.route("/sell", methods=["GET", "POST"])
+@login_required
 def sell():
     if request.method == "POST":
         product_name = request.form.get("product_name")
@@ -180,18 +196,3 @@ def img_name(name):
     # returns a list of two strings... [0] name and [1] extension
     list = name.split(".")
     return list
-
-
-
-def login_required(f):
-    """
-    Decorate routes to require login.
-
-    http://flask.pocoo.org/docs/1.0/patterns/viewdecorators/
-    """
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session.get("user_id") is None:
-            return redirect("/login")
-        return f(*args, **kwargs)
-    return decorated_function
