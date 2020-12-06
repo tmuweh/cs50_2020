@@ -58,10 +58,12 @@
                     <a href="#">{{ product['product_name']}}</a>
                   </h4>
                   <h5>${{ product['unit_price'] }}</h5>
-                  <p class="card-text">{{product['description']}}</p>
+                  <p class="card-text">{{product['description'][:50]}} <a class"card-link" href="/product?n={{product['product_id']}}"> more...</a></p>
                 </div>
                 <div class="card-footer">
-                  <small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>
+                  <!--<small class="text-muted">&#9733; &#9733; &#9733; &#9733; &#9734;</small>-->
+                  <button type="button" class="btn btn-info" >Add to Cart</button>
+                  <button type="button" class="btn btn-light" >Buy Now</button>
                 </div>
               </div>
             </div>
@@ -75,3 +77,4 @@
 <!-- /.row -->
 
 {% endblock %}
+

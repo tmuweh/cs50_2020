@@ -114,6 +114,7 @@ def login():
             # Remember which user has logged in
             session["user_id"] = rows[0]["user_id"]
             session["username"] = rows[0]["username"]
+            session["first_name"] = rows[0]["first_name"]
 
             # Redirect user to home page
             return redirect("/")
@@ -166,6 +167,13 @@ def sell():
 
         categories = db.execute("SELECT * FROM category WHERE 1")
         return render_template("sell.html", categories=categories)
+
+
+@app.route("/product")
+def product_info():
+    product_id = request.args
+    print(product_id)
+
 
 """ get name and extension of images """
 def img_name(name):

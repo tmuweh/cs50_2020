@@ -46,7 +46,15 @@
             <a class="nav-link" href="/sell">Sell</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/logout">Logout</a>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                {{session.first_name.capitalize()}}
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Settings</a>
+                <a class="dropdown-item" href="/logout">Logout</a>
+              </div>
+            </div>
           </li>
           {% else %}
           <li class="nav-item">
