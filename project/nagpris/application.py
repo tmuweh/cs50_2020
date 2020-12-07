@@ -10,6 +10,7 @@ import os
 from werkzeug.utils import secure_filename
 import time
 
+
 ticks = time.time()
 
 IMAGE_UPLOADS = 'static/images/products/'
@@ -38,6 +39,7 @@ app.config["SESSION_TYPE"] = "filesystem"
 app.debug = True
 Session(app)
 
+cart = []
 
 db = SQL("sqlite:///data.db")
 
@@ -65,7 +67,9 @@ def index():
     f = request.args
     if f:
         if 'search' in f:
-            products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id AND product_name LIKE :name ", name="%" + f["search"]+ "%")
+            # search each word in entered search string
+            for item in splitter(f['search'], " "):
+                products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id AND product_name LIKE :name UNION SELECT * FROM products JOIN images WHERE products.product_id = images.product_id AND product_name LIKE :item ", name="%" + splitter(f['search'], " ")[0] + "%", item="%" + item + "%")
         else:
             cat_id = db.execute("SELECT cat_id FROM category WHERE name = :name", name=f['f'].capitalize())
             if cat_id:
@@ -74,6 +78,13 @@ def index():
         products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id")
 
     categories = db.execute("SELECT * FROM category WHERE 1")
+    if "cart_items" in session:
+        pass
+    else:
+        session["cart"] = []
+        session["cart_items"] = 0
+
+
     return render_template("index.html", products=products, categories=categories)
 
 
@@ -150,7 +161,7 @@ def sell():
             return render_template("sell.html", message="Please upload a clear image of the product")
         else:
             # rename image file
-            image.filename = img_name(image.filename)[0] + "_" + str(int(ticks)) + "." + img_name(image.filename)[1]
+            image.filename = splitter(image.filename, ".")[0] + "_" + str(int(ticks)) + "." + splitter(image.filename, '.')[1]
 
             # secure name of image
             filename = secure_filename(image.filename)
@@ -190,9 +201,24 @@ def product_info():
     else:
         return redirect("/")
 
+@app.route("/buy", methods=["POST", "GET"])
+def buy():
 
-""" get name and extension of images """
-def img_name(name):
+    products = request.args
+    if "cart" in session:
+        session["cart"] = session["cart"].extend([products["n"]])
+    else:
+        session["cart"] = [products["n"]]
+    print(session["cart"])
+    session["cart_items"] =  0 # len(session["cart"])
+    print(session["cart"])
+    if request.method == "POST":
+        pass
+    return redirect("/")
+
+
+""" separate strings according to supplied delimiter"""
+def splitter(name, delimiter):
     # returns a list of two strings... [0] name and [1] extension
-    list = name.split(".")
+    list = name.split(delimiter)
     return list

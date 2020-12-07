@@ -16,7 +16,7 @@
         <p>{{product_info[0]["description"]}}</p>
         <h3 class="badge badge-dark">${{ product_info[0]['unit_price'] }}</h3>
         <br>
-        <button type="button" class="btn btn-info" >Add to Cart</button>
+        <a href="/buy?n={{product_info[0]['product_info']}}"><button type="button" class="btn btn-info">Add to Cart</button></a>
         <button type="button" class="btn btn-light" >Buy Now</button>
       </div>
     </div>
