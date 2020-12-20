@@ -78,6 +78,7 @@ def index():
         products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id")
 
     categories = db.execute("SELECT * FROM category WHERE 1")
+    images = db.execute("SELECT img_url FROM images")
     if "cart_items" in session:
         pass
     else:
@@ -85,7 +86,7 @@ def index():
         session["cart_items"] = 0
 
 
-    return render_template("index.html", products=products, categories=categories)
+    return render_template("index.html", products=products, categories=categories, images=images)
 
 
 @app.route("/logout")
