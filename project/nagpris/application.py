@@ -202,8 +202,8 @@ def product_info():
     else:
         return redirect("/")
 
-@app.route("/buy", methods=["POST", "GET"])
-def buy():
+@app.route("/info", methods=["POST", "GET"])
+def info():
 
     products = request.args
     if "cart" in session:
