@@ -5,6 +5,7 @@ from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 from datetime import datetime
 from functools import wraps
+from flask_mail import Mail, Message
 
 import os
 from werkzeug.utils import secure_filename
@@ -38,8 +39,15 @@ app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
 app.debug = True
 Session(app)
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 587
+app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'nagprisapp@gmail.com'  # enter your email here
+app.config['MAIL_DEFAULT_SENDER'] = 'nagprisapp@gmail.com' # enter your email here
+app.config['MAIL_PASSWORD'] = 'alpha1002' # enter your password here
 
-cart = []
+# mailing
+mail = Mail(app)
 
 db = SQL("sqlite:///data.db")
 
@@ -79,11 +87,6 @@ def index():
 
     categories = db.execute("SELECT * FROM category WHERE 1")
     images = db.execute("SELECT img_url FROM images")
-    if "cart_items" in session:
-        pass
-    else:
-        session["cart"] = []
-        session["cart_items"] = 0
 
 
     return render_template("index.html", products=products, categories=categories, images=images)
@@ -96,7 +99,6 @@ def logout():
     session.clear()
 
     return redirect("/")
-
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -195,27 +197,29 @@ def sell():
 @app.route("/product")
 def product_info():
     product_id = request.args
-    print(product_id)
     product_info = db.execute("SELECT * FROM products JOIN images WHERE images.product_id = products.product_id AND products.product_id = :product_id", product_id=product_id["n"])
     if product_info:
         return render_template("product.html", product_info=product_info)
     else:
         return redirect("/")
 
-@app.route("/info", methods=["POST", "GET"])
-def info():
 
-    products = request.args
-    if "cart" in session:
-        session["cart"] = session["cart"].extend([products["n"]])
-    else:
-        session["cart"] = [products["n"]]
-    print(session["cart"])
-    session["cart_items"] =  0 # len(session["cart"])
-    print(session["cart"])
+@app.route("/message", methods=["POST", "GET"])
+@login_required
+def message():
+
+
     if request.method == "POST":
-        pass
-    return redirect("/")
+        email = request.form.get("email")
+        message = request.form.get("message")
+        name = request.form.get("name")
+        msg = Message("Feedback", recipients=[app.config['MAIL_USERNAME']])
+        msg.body = "{} from {}<{}>.".format(message, name, email)
+        mail.send(msg)
+        print("\nData received. Now redirecting ...")
+        return redirect("/")
+    else:
+        return render_template("message.html")
 
 
 """ separate strings according to supplied delimiter"""
