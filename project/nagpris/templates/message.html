@@ -7,12 +7,16 @@
 {% block main %}
     <div class="row">
         <div class="col-md-6">
+            <h1>{{product_info[0]["product_name"]}} - ${{product_info[0]["unit_price"]}}</h1>
             <form action="/message" method="post" id="form">
                 <div class="form-group">
                     <input autocomplete="off" autofocus class="form-control" name="email" placeholder="Email" type="email" required>
                 </div>
                 <div class="form-group">
                     <input autocomplete="off" autofocus class="form-control" name="name" placeholder="name" type="text" required>
+                </div>
+                <div class="form-group">
+                    <input autocomplete="off" autofocus class="form-control" name="user_id" type="hidden" value="{{product_info[0]['user_id']}}" required>
                 </div>
                 <div class="form-group">
                             <label for="message">Message</label>

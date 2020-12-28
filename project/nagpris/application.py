@@ -197,9 +197,10 @@ def sell():
 @app.route("/product")
 def product_info():
     product_id = request.args
-    product_info = db.execute("SELECT * FROM products JOIN images WHERE images.product_id = products.product_id AND products.product_id = :product_id", product_id=product_id["n"])
-    if product_info:
-        return render_template("product.html", product_info=product_info)
+    if product_id:
+        product_info = db.execute("SELECT * FROM products JOIN images WHERE images.product_id = products.product_id AND products.product_id = :product_id", product_id=product_id["n"])
+        if product_info:
+            return render_template("product.html", product_info=product_info)
     else:
         return redirect("/")
 
@@ -208,18 +209,25 @@ def product_info():
 @login_required
 def message():
 
-
+    product_id = request.args
     if request.method == "POST":
         email = request.form.get("email")
         message = request.form.get("message")
+        seller_id = request.form.get("user_id")
+        print(seller_id)
+        seller_email  = db.execute("SELECT email FROM users WHERE user_id = :user_id", user_id=int(seller_id))
+        print(seller_email[0]["email"])
         name = request.form.get("name")
-        msg = Message("Feedback", recipients=[app.config['MAIL_USERNAME']])
+        msg = Message("Purchase Request", recipients=[seller_email[0]["email"]])
         msg.body = "{} from {}<{}>.".format(message, name, email)
         mail.send(msg)
         print("\nData received. Now redirecting ...")
         return redirect("/")
+    elif product_id:
+        product_info = db.execute("SELECT * FROM products JOIN users WHERE users.user_id = products.user_id AND products.product_id = :product_id", product_id=product_id["pid"])
+        return render_template("message.html", product_info=product_info)
     else:
-        return render_template("message.html")
+        return redirect("/")
 
 
 """ separate strings according to supplied delimiter"""
