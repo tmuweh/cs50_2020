@@ -86,10 +86,10 @@ def index():
         products = db.execute("SELECT * FROM products JOIN images WHERE products.product_id = images.product_id")
 
     categories = db.execute("SELECT * FROM category WHERE 1")
-    images = db.execute("SELECT img_url FROM images")
-
-
-    return render_template("index.html", products=products, categories=categories, images=images)
+    if not products:
+        return render_template("index.html", categories=categories)
+    else:
+        return render_template("index.html", products=products, categories=categories)
 
 
 @app.route("/logout")
@@ -182,7 +182,7 @@ def sell():
                                     img_url=image_path, product_id=product_id)
                 if stored:
                     image.save(image_path)
-                    return render_template("index.html", message="Product added!")
+                    return redirect("/")
                 else:
                     return render_template("index.html", message="Couldn't save image")
             else:
@@ -227,6 +227,9 @@ def message():
     else:
         return redirect("/")
 
+@app.route("/how-to")
+def help():
+    return render_template("help.html")
 
 """ separate strings according to supplied delimiter"""
 def splitter(name, delimiter):
