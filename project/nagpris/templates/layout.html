@@ -90,7 +90,12 @@
   <script>
     var d = new Date();
     document.getElementById("demo").innerHTML = d.getFullYear();
+    var alertList = document.querySelectorAll('.alert')
+    alertList.forEach(function (alert) {
+      new bootstrap.Alert(alert)
+    })
   </script>
+
   {% block jsblock %}
 
   {% endblock%}

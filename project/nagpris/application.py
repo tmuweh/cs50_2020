@@ -112,8 +112,8 @@ def register():
 
         # register to db
         rows = db.execute("INSERT INTO users(username, first_name, last_name, hash, email) VALUES(:username, :first_name,:last_name, :hash, :email)",
-                                        username=username, first_name=first_name, last_name=last_name, hash=generate_password_hash("password"), email=email)
-        return redirect("/login")
+                                        username=username, first_name=first_name, last_name=last_name, hash=generate_password_hash(password), email=email)
+        return render_template("login.html", info="user successfully created")
     else:
         return render_template("register.html")
 
@@ -128,10 +128,9 @@ def login():
         # Query database for username
         rows = db.execute("SELECT * FROM users WHERE username = :username",
                           username=request.form.get("username"))
-        # Ensure username exists and password is correct
-        print(len(rows))
-        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
 
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
             return render_template("login.html", message="Invalid username/password")
 
         else:
@@ -211,15 +210,14 @@ def message():
 
     product_id = request.args
     if request.method == "POST":
-        email = request.form.get("email")
+        email = db.execute("SELECT email FROM users WHERE user_id = :user_id", user_id=session["user_id"])
         message = request.form.get("message")
         seller_id = request.form.get("user_id")
-        print(seller_id)
         seller_email  = db.execute("SELECT email FROM users WHERE user_id = :user_id", user_id=int(seller_id))
-        print(seller_email[0]["email"])
-        name = request.form.get("name")
-        msg = Message("Purchase Request", recipients=[seller_email[0]["email"]])
-        msg.body = "{} from {}<{}>.".format(message, name, email)
+        product_name = request.form.get("product_name")
+        name = session["first_name"]
+        msg = Message("Purchase Request" + " for " + product_name, recipients=[seller_email[0]["email"]])
+        msg.body = "{} from {}<{}>.".format(message, name, email[0]["email"])
         mail.send(msg)
         print("\nData received. Now redirecting ...")
         return redirect("/")

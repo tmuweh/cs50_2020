@@ -9,7 +9,16 @@
     <div class="row">
         <div class="col-sm-4"></div>
         <div class="col-sm-4">
-            <lable for="form">
+            {% if message %}
+                <div class="alert alert-danger" role="alert">
+                 {{message}}
+                </div>
+            {% elif info %}
+                <div class="alert alert-success" role="alert">
+                 {{info}}
+                </div>
+            {% endif %}
+            <lable for="form" class>
                 <h1>Log In</h1>
                 <br>
             </lable>
